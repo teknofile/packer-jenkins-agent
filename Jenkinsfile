@@ -27,5 +27,19 @@ pipeline {
         sh "ls -alh"
       }
     }
+
+    stage("Validate Template") {
+      steps {
+        echo "Testing to make sure that the json is right"
+        sh "./packer validate jenkins-agent-ubuntu-x86_64.json"
+      }
+    }
+
+    stage("Build the AMI") {
+      steps {
+        echo "Building the AMI"
+        // TODO: "With Credentials"
+      }
+    }
   }
 }
