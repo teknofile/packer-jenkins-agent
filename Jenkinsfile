@@ -1,18 +1,20 @@
 pipeline {
   agent {
-    label 'X86_64'
+    label 'linux'
   }
-
   options {
     buildDiscarder(logRotator(numToKeepStr: '10', daysToKeepStr: '60'))
     parallelsAlwaysFailFast()
   }
-
-  enviornment {
-    TKF_USER = 'teknofile'
-  }
-
   stages {
+    stage("Setup Enviornment") {
+      steps {
+        script {
+          env.EXIT_STATUS = ''
+          env.COMMIT_SHA = sh(
+            script: '''git rev-parse HEAD''',
+            returnStdout: true).trim()
+
     stage("Get Packer") {
       steps {
         echo "Obtaining the latest packer binary on ${NODE_NAME}"
