@@ -1,26 +1,25 @@
 pipeline {
-  agent {
-    label 'linux'
-  }
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '10', daysToKeepStr: '60'))
-    parallelsAlwaysFailFast()
-  }
+  agent any
   stages {
-    stage("Setup Enviornment") {
+    stage('Setup Packer') {
       steps {
-        script {
-          env.EXIT_STATUS = ''
-          env.COMMIT_SHA = sh(
-            script: '''git rev-parse HEAD''',
-            returnStdout: true).trim()
-
-    stage("Get Packer") {
+        echo "Setup Packer"
+      }
+    }
+    stage('Validate Packer') {
       steps {
-        echo "Obtaining the latest packer binary on ${NODE_NAME}"
-        sh "curl -LO https://raw.github.com/robertpeteuil/packer-installer/master/packer-install.sh"
-        sh "chmod +x packer-install.sh"
-        sh "./packer-install.sh -c"
+        echo "Validate Packer"
+      }
+    }
+    stage('Build Image') {
+      steps {
+        echo "Build Image"
+      }
+    }
+    stage('Validate Image') {
+      steps {
+        echo "Validate Image"
+      }
     }
   }
 }
