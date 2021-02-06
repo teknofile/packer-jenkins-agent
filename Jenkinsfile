@@ -24,6 +24,7 @@ pipeline {
         sh "curl -LO https://raw.github.com/robertpeteuil/packer-installer/master/packer-install.sh"
         sh "chmod +x packer-install.sh"
         sh "./packer-install.sh -c"
+      }
     }
   }
 }
