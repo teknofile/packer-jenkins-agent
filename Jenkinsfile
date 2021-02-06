@@ -14,6 +14,9 @@ pipeline {
           env.COMMIT_SHA = sh(
             script: '''git rev-parse HEAD''',
             returnStdout: true).trim()
+        }
+      }
+    }
 
     stage("Get Packer") {
       steps {
