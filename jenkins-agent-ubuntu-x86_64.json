@@ -1,5 +1,6 @@
 {
   "min_packer_version": "1.6.4",
+  ,
   "variables": {
     "ami_name": "tkf-jenkins-agent",
     "aws_region": "us-west-2"
