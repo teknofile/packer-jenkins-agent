@@ -39,9 +39,7 @@ pipeline {
       steps {
         echo "Building the AMI"
         // TODO: "With Credentials"
-        withCredentials([usernamePassword(credentialsId: 'aws-tkf-sharedservices', passwordVariable: 'AWS_SECRET_KEY', usernameVariable: 'AWS_ACCESS_KEY')]) {
-          env.AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY}
-          env.AWS_SECRET_ACCESS_KEY=${AWS_SECRET_KEY}
+        withCredentials([usernamePassword(credentialsId: 'aws-tkf-sharedservices', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
           sh "./packer build jenkins-agent-ubuntu-x86_64.json"
         }
       }
