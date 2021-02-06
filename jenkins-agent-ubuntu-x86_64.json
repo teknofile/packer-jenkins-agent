@@ -2,7 +2,9 @@
   "min_packer_version": "1.6.4",
   "variables": {
     "ami_name": "tkf-jenkins-agent",
-    "aws_region": "us-west-2"
+    "aws_region": "us-west-2",
+    "aws_access_key": "PASSMEIN",
+    "aws_secret_key": "PASSMEIN"
   },
   "builders": [{
     "ami_name": "{{user `ami_name`}}",
@@ -10,6 +12,8 @@
     "instance_type": "t3.nano",
     "name": "ubuntu20-ami",
     "region": "{{user `aws_region`}}",
+    "access_key": "{{user `aws_access_key}}",
+    "secret_key": "{{user `aws_secret_key}}",
     "type": "amazon-ebs",
     "source_ami_filter": {
       "filters": {

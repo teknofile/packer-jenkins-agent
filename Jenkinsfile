@@ -39,6 +39,9 @@ pipeline {
       steps {
         echo "Building the AMI"
         // TODO: "With Credentials"
+        withCredentials([usernamePassword(credentialsId: 'aws-tkf-sharedservices', passwordVariable: 'AWS_SECRET_KEY', usernameVariable: 'AWS_ACCESS_KEY')]) {
+          sh "./packer build -var 'aws_access_key=${AWS_ACCESS_KEY}' - var 'aws_secret_key=${AWS_SECRET_KEY}' notreal.json"
+        }
       }
     }
   }
