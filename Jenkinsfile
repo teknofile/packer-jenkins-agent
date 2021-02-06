@@ -21,7 +21,7 @@ pipeline {
     stage("Get Packer") {
       steps {
         echo "Obtaining the latest packer binary on ${NODE_NAME}"
-        sh "curl -LO https://raw.github.com/robertpeteuil/packer-installer/master/packer-install.sh"
+        sh "curl -LO https://raw.github.com/teknofile/packer-installer/master/packer-install.sh"
         sh "chmod +x packer-install.sh"
         sh "./packer-install.sh -c"
         sh "ls -alh"
