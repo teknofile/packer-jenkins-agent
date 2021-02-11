@@ -18,19 +18,10 @@ pipeline {
       }
     }
 
-    stage("Get Packer") {
-      steps {
-        echo "Obtaining the latest packer binary on ${NODE_NAME}"
-        sh "curl -LO https://raw.github.com/teknofile/packer-installer/master/packer-install.sh"
-        sh "chmod +x packer-install.sh"
-        sh "./packer-install.sh -c"
-      }
-    }
-
     stage("Validate Template") {
       steps {
         echo "Testing to make sure that the json is right"
-        sh "./packer validate jenkins-agent-ubuntu-x86_64.json"
+        sh "/usr/local/bin/packer validate jenkins-agent-ubuntu-x86_64.json"
       }
     }
 
@@ -40,7 +31,7 @@ pipeline {
         // TODO: "With Credentials"
         withCredentials([usernamePassword(credentialsId: 'aws-tkf-sharedservices', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         // sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./packer build jenkins-agent-ubuntu-x86_64.json"
-          sh "./packer build jenkins-agent-ubuntu-x86_64.json"
+          sh "/usr/local/bin/packer build jenkins-agent-ubuntu-x86_64.json"
         }
       }
     }
