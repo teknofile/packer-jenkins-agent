@@ -56,7 +56,7 @@ pipeline {
             )
             env.VAULT_LOGIN_TOKEN = sh(
               returnStdout: true,
-              script: "vault write -field=token auth/pipeline/login role_id=${ROLE_ID} secret_id=${UNWRAPPED_SID}
+              script: "vault write -field=token auth/pipeline/login role_id=${ROLE_ID} secret_id=${UNWRAPPED_SID}"
             )
             env.VAULT_TOKEN = sh(
               returnStdout: true,
