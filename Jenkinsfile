@@ -6,6 +6,10 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '10', daysToKeepStr: '60'))
     parallelsAlwaysFailFast()
   }
+  environment {
+    ROLE_ID="54c29b82-d415-dd33-288c-cb07ea43e16d"
+    VAULT_ADDR="https://vault.copperdale.teknofile.net"
+  }
   stages {
     stage("Setup Enviornment") {
       steps {
@@ -25,6 +29,19 @@ pipeline {
       }
     }
 
+    // The Jenkins node is only allowed to create the wrapped secret ID
+    // and with a wrap-ttl between 100s and 300s
+    stage("Create Wrapped Secret ID") {
+      steps {
+        script {
+          env.WRAPPED_SID = sh(
+            returnStdout: true,
+            script: "vault write -field=wrapping_token -wrap-ttl=200s -f auth/pipeline/role/pipeline-approle/secret-id"
+          )
+        }
+      }
+    }
+
     stage("Build the AMI") {
       steps {
         echo "Building the AMI"
@@ -35,5 +52,6 @@ pipeline {
         }
       }
     }
+
   }
 }
