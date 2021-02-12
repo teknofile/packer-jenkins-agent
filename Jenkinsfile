@@ -64,7 +64,25 @@ pipeline {
             )
 
             sh '''
-              VAULT_TOKEN=${VAULT_TOKEN1} vault read aws/sts/tkfPipeline role_arn=arn:aws:iam::133530902744:role/tkfPipelineRole -format=json
+              VAULT_TOKEN=${VAULT_TOKEN1} vault read aws/sts/tkfPipeline role_arn=arn:aws:iam::133530902744:role/tkfPipelineRole -format=json > /tmp/aws_creds.json
+            '''
+            env.AWS_ACCESS_KEY_ID = sh (
+              returnStdout: true,
+              script: "cat /tmp/aws_creds.json | jq .data.access_key"
+            )
+            env.AWS_SECRET_ACCESS_KEY = sh (
+              returnStdout: true,
+              script: "cat /tmp/aws_creds.json | jq .data.secret_key"
+            )
+            env.AWS_SESSION_TOKEN = sh (
+              returnStdout: true,
+              script: "cat /tmp/aws_creds.json | jq .data.security_token"
+            )
+
+            sh '''
+              echo "Testing out the aws creds..."
+              export | grep AWS
+              aws ec2 describe-instances
             '''
           }
         }
