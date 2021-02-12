@@ -55,7 +55,7 @@ pipeline {
         script {
           env.UNWRAPPED_SID = sh(
             returnStdout: true,
-            script: "vault unwrap -field=scret_id ${WRAPPED_SID}"
+            script: "vault unwrap -field=secret_id ${WRAPPED_SID}"
           )
         }
       }
