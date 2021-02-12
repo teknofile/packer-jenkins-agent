@@ -58,13 +58,13 @@ pipeline {
               returnStdout: true,
               script: "vault write -field=token auth/pipeline/login role_id=${ROLE_ID} secret_id=${UNWRAPPED_SID}"
             )
-            env.VAULT_TOKEN = sh(
+            env.VAULT_TOKEN1 = sh(
               returnStdout: true,
               script: "vault login -field=token ${VAULT_LOGIN_TOKEN}"
             )
 
             sh '''
-              vault read aws/sts/tkfPipeline role_arn=arn:aws:iam::133530902744:role/tkfPipelineRole -format=json
+              VAULT_TOKEN=${VAULT_TOKEN1} vault read aws/sts/tkfPipeline role_arn=arn:aws:iam::133530902744:role/tkfPipelineRole -format=json
             '''
           }
         }
