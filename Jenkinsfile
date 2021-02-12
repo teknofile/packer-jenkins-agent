@@ -41,10 +41,18 @@ pipeline {
               vaultAddr: 'https://vault.copperdale.teknofile.net'
             ]
           ]){
+
+            sh '''
+              export
+            '''
+
             env.WRAPPED_SID = sh(
               returnStdout: true,
               script: "vault write -field=wrapping_token -wrap-ttl=200s -f auth/pipeline/role/pipeline-approle/secret-id"
             )
+            env.UNWRAPPED_SID = sh(
+              returnStdout: true,
+              script: "vault unwrap -field=secret_id ${WRAPPED_SID}"
           }
         }
       }
