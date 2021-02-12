@@ -64,7 +64,7 @@ pipeline {
             )
 
             sh '''
-              vault read aws/sts/tkfpipeline role_arn=arn:aws:iam::133530902744:role/tkfPipelineRole -format=json
+              vault read aws/sts/tkfPipeline role_arn=arn:aws:iam::133530902744:role/tkfPipelineRole -format=json
             '''
           }
         }
