@@ -82,7 +82,7 @@ pipeline {
             sh '''
               echo "Testing out the aws creds..."
               export | grep AWS
-              AWS_REGION="us-west-2" aws ec2 describe-instances
+              aws ec2 describe-instances --region us-west-2
             '''
           }
         }
