@@ -72,6 +72,29 @@ pipeline {
       }
     }
 
+    stage("Log into vault with Pipeline AppRole") {
+      steps {
+        script {
+          env.VAULT_TOKEN = sh(
+            returnStdout: true,
+            script: "vault login -field=token ${VAULT_LOGIN_TOKEN}"
+          )
+        }
+      }
+    }
+
+    stage("Create AWS Creds for Packer") {
+      steps {
+        script {
+          sh '''
+            vault read aws/sts/tkfPipeline role_arn=arn:aws:iam::133530902744:role/tkfPipelineRole -format=json > ./aws_creds.json
+            cat ./aws_creds.json
+          '''
+        }
+      }
+    }
+        
+
     stage("Build the AMI") {
       steps {
         echo "Building the AMI"
