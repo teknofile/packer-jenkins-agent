@@ -54,51 +54,19 @@ pipeline {
               returnStdout: true,
               script: "vault unwrap -field=secret_id ${WRAPPED_SID}"
             )
+            env.VAULT_LOGIN_TOKEN = sh(
+              returnStdout: true,
+              script: "vault write -field=token auth/pipeline/login role_id=${ROLE_ID} secret_id=${UNWRAPPED_SID}
+            )
+            env.VAULT_TOKEN = sh(
+              returnStdout: true,
+              script: "vault login -field=token ${VAULT_LOGIN_TOKEN}"
+            )
+
+            sh '''
+              vault read aws/sts/tkfpipeline role_arn=arn:aws:iam::133530902744:role/tkfPipelineRole -format=json
+            '''
           }
-        }
-      }
-    }
-
-    stage("Unwrapping Secret ID") {
-      steps {
-        script {
-          env.UNWRAPPED_SID = sh(
-            returnStdout: true,
-            script: "vault unwrap -field=secret_id ${WRAPPED_SID}"
-          )
-        }
-      }
-    }
-
-    stage("Get login token with Role ID and unwrapped Secret ID") {
-      steps {
-        script {
-          env.VAULT_LOGIN_TOKEN = sh(
-            returnStdout: true,
-            script: "vault write -field=token auth/pipeline/login role_id=${ROLE_ID} secret_id=${UNWRAPPED_SID}"
-          )
-        }
-      }
-    }
-
-    stage("Log into vault with Pipeline AppRole") {
-      steps {
-        script {
-          env.VAULT_TOKEN = sh(
-            returnStdout: true,
-            script: "vault login -field=token ${VAULT_LOGIN_TOKEN}"
-          )
-        }
-      }
-    }
-
-    stage("Create AWS Creds for Packer") {
-      steps {
-        script {
-          sh '''
-            vault read aws/sts/tkfPipeline role_arn=arn:aws:iam::133530902744:role/tkfPipelineRole -format=json > ./aws_creds.json
-            cat ./aws_creds.json
-          '''
         }
       }
     }
