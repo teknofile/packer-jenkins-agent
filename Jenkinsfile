@@ -68,16 +68,16 @@ pipeline {
             '''
             env.AWS_ACCESS_KEY_ID = sh (
               returnStdout: true,
-              script: "cat /tmp/aws_creds.json | jq .data.access_key"
-            )
+              script: "cat /tmp/aws_creds.json | jq -r .data.access_key"
+            ).trim()
             env.AWS_SECRET_ACCESS_KEY = sh (
               returnStdout: true,
-              script: "cat /tmp/aws_creds.json | jq .data.secret_key"
-            )
+              script: "cat /tmp/aws_creds.json | jq -r .data.secret_key"
+            ).trim()
             env.AWS_SESSION_TOKEN = sh (
               returnStdout: true,
-              script: "cat /tmp/aws_creds.json | jq .data.security_token"
-            )
+              script: "cat /tmp/aws_creds.json | jq -r .data.security_token"
+            ).trim()
 
             sh '''
               echo "Testing out the aws creds..."
