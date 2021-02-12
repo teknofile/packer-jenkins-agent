@@ -60,6 +60,18 @@ pipeline {
         }
       }
     }
+
+    stage("Get login token with Role ID and unwrapped Secret ID") {
+      steps {
+        script {
+          env.VAULT_LOGIN_TOKEN = sh(
+            returnStdout: true,
+            script: "vault write -field=token auth/pipeline/login role_id=${ROLE_ID} secret_id=${UNWRAPPED_SID}"
+          )
+        }
+      }
+    }
+
     stage("Build the AMI") {
       steps {
         echo "Building the AMI"
