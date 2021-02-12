@@ -50,6 +50,12 @@ pipeline {
       }
     }
 
+    stage("Unwrapping Secret ID") {
+      env.UNWRAPPED_SID = sh(
+        returnStdout: true,
+        script: "vault unwrap -field=scret_id ${WRAPPED_SID}"
+      )
+    }
     stage("Build the AMI") {
       steps {
         echo "Building the AMI"
