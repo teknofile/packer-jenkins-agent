@@ -34,9 +34,17 @@ pipeline {
     stage("Create Wrapped Secret ID") {
       steps {
         script {
-          env.WRAPPED_SID = sh(
-            returnStdout: true,
-            script: "vault write -field=wrapping_token -wrap-ttl=200s -f auth/pipeline/role/pipeline-approle/secret-id"
+          withCredentials([
+            [
+              $class: 'VaultTokenCredentialBinding',
+              credentialsId: 'Jenkins_Node_Vault_AppRole',
+              vaultAddr: 'https://vault.copperdale.teknofile.net'
+            ]
+          ]){
+            env.WRAPPED_SID = sh(
+              returnStdout: true,
+              script: "vault write -field=wrapping_token -wrap-ttl=200s -f auth/pipeline/role/pipeline-approle/secret-id"
+            }
           )
         }
       }
